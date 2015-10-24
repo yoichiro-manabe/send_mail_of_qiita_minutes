@@ -16,8 +16,6 @@ module SendMailOfQiitaMinutes
 
     def execute
       options = Options.parse!(@argv)
-      pp options
-
       sub_command = options.delete(:command)
 
       instance = case sub_command
@@ -26,7 +24,7 @@ module SendMailOfQiitaMinutes
                    when 'email_config'
                      EmailConfig.new(options: options).execute
                    when 'email_addresses'
-                     p 'email_addresses'
+                     EmailAddress.new(options: options).execute
                    when 'minutes_list'
                      p 'minutes_list'
                  end

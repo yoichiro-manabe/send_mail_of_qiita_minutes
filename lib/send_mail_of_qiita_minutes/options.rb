@@ -51,7 +51,7 @@ module SendMailOfQiitaMinutes
           opt.on('-D', '--delete', 'delete the email config.') { |v| options[:delete] = v }
         end
 
-        sub_command_parsers['emai_addresses'] = OptionParser.new do |opt|
+        sub_command_parsers['email_addresses'] = OptionParser.new do |opt|
           opt.on('-s VAL', '--set=VAL', 'set a email addresses.') { |v| options[:set] = v }
           opt.on('-d', '--display', 'display all email addresses.') { |v| options[:display] = v }
           opt.on('-D', '--delete', 'delete all email addresses.') { |v| options[:delete] = v }

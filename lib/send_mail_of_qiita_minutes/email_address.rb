@@ -1,9 +1,7 @@
-require 'json'
-
 module SendMailOfQiitaMinutes
-  class AuthInfo
+  class EmailAddress
 
-    TARGET_NAME_AUTH_INFO = 'auth_info'.freeze
+    TARGET_NAME_EMAIL_ADDRESSES = 'email_addresses'.freeze
 
     def initialize(options:)
       @options = options
@@ -12,13 +10,12 @@ module SendMailOfQiitaMinutes
     def execute
       if @options.key?(:set)
 
-        hash = {}
-        @options[:set].split(',').each do|item|
-          key_value = item.split(':')
-          hash[key_value[0].strip] = key_value[1].strip
+        email_addresses = []
+        @options[:set].split(',').each do|email_address|
+          email_addresses << email_address.strip
         end
 
-        write_config(access_token: hash['access_token'], host: hash['host'])
+        write_config(email_address: email_addresses)
 
       elsif @options.key?(:display)
         hash = read_config
@@ -37,9 +34,9 @@ module SendMailOfQiitaMinutes
 
     private
 
-    def write_config(access_token:, host:)
-      hash = {TARGET_NAME_AUTH_INFO => {'access_token' => access_token, 'host' => host}}
-      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_AUTH_INFO, data: hash
+    def write_config(email_address:)
+      hash = {TARGET_NAME_EMAIL_ADDRESSES => email_address}
+      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_EMAIL_ADDRESSES, data: hash
     end
 
     def read_config
@@ -50,14 +47,14 @@ module SendMailOfQiitaMinutes
         end
 
         hash = JSON.load data
-        result_hash = hash[TARGET_NAME_AUTH_INFO]
+        result_hash = hash[TARGET_NAME_EMAIL_ADDRESSES]
       end
 
       result_hash
     end
 
     def delete_config
-      SendMailOfQiitaMinutes.delete_config target:TARGET_NAME_AUTH_INFO
+      SendMailOfQiitaMinutes.delete_config target:TARGET_NAME_EMAIL_ADDRESSES
     end
   end
 end

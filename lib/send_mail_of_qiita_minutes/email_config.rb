@@ -2,6 +2,9 @@ require 'json'
 
 module SendMailOfQiitaMinutes
   class EmailConfig
+
+    TARGET_NAME_MAIL_CONFIG = 'email_config'.freeze
+
     def initialize(options:)
       @options = options
     end
@@ -25,7 +28,7 @@ module SendMailOfQiitaMinutes
         hash = read_config
 
         if hash.blank?
-          p 'Unable get auth info.Set auth info.'
+          p 'Unable get email config. Set auth info.'
         else
           p hash
         end
@@ -39,13 +42,11 @@ module SendMailOfQiitaMinutes
     private
 
     def write_config(address:, port:, domain:, user_name:, password:)
-      hash = {'email_config' => {
+      hash = {TARGET_NAME_MAIL_CONFIG => {
           'address' => address, 'port' => port, 'domain' => domain, 'user_name' => user_name, 'password' => password
       }}
 
-      pp "hash:#{hash}"
-
-      SendMailOfQiitaMinutes.write_json_for_append target: :email_config, data: hash
+      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_MAIL_CONFIG, data: hash
     end
 
     def read_config
@@ -56,23 +57,14 @@ module SendMailOfQiitaMinutes
         end
 
         hash = JSON.load(data)
-        result_hash = hash['email_config']
+        result_hash = hash[TARGET_NAME_MAIL_CONFIG]
       end
 
       result_hash
     end
 
     def delete_config
-      SendMailOfQiitaMinutes.delete_config  target:'email_config'
-      # if File.exist?(CONFIG_FILE_NAME)
-      #   current_data = File.open CONFIG_FILE_NAME do |f|
-      #     f.read
-      #   end
-      #
-      #   hash = JSON.load(current_data)
-      #   hash.delete('email_config') if hash.key? 'email_config'
-      #   SendMailOfQiitaMinutes.write_json data: hash
-      # end
+      SendMailOfQiitaMinutes.delete_config  target:TARGET_NAME_MAIL_CONFIG
     end
   end
 end

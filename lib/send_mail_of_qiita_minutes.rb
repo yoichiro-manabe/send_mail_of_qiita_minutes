@@ -3,6 +3,7 @@ require 'send_mail_of_qiita_minutes/command'
 require 'send_mail_of_qiita_minutes/options'
 require 'send_mail_of_qiita_minutes/auth_info'
 require 'send_mail_of_qiita_minutes/email_config'
+require 'send_mail_of_qiita_minutes/email_address'
 require 'active_support/all'
 require 'pp'
 
@@ -22,7 +23,6 @@ module SendMailOfQiitaMinutes
 
   def self.write_json_for_append(target:, data:)
 
-    # File.unlink CONFIG_FILE_NAME if File.exist?(CONFIG_FILE_NAME)
     current_config_hash = {}
     if File.exist?(CONFIG_FILE_NAME)
       current_data = File.open CONFIG_FILE_NAME do |f|
@@ -32,17 +32,9 @@ module SendMailOfQiitaMinutes
       current_config_hash = JSON.load(current_data)
     end
 
-    p "target:#{target}"
-    p "current_config_hash.key? #{target.to_s}:#{current_config_hash.key? target.to_s}"
     current_config_hash.delete(target.to_s) if current_config_hash.key? target.to_s
-
-    pp current_config_hash
-    pp data
-
     current_config_hash[target.to_s] = data[target.to_s]
     json = JSON.dump(current_config_hash)
-
-    p json
 
     File.open CONFIG_FILE_NAME, 'w' do |f|
       f.write json
