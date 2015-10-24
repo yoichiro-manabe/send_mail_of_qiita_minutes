@@ -35,14 +35,7 @@ module SendMailOfQiitaMinutes
       end
     end
 
-    private
-
-    def write_config(access_token:, host:)
-      hash = {TARGET_NAME_AUTH_INFO => {'access_token' => access_token, 'host' => host}}
-      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_AUTH_INFO, data: hash
-    end
-
-    def read_config
+    def self.read_config
       result_hash = nil
       if File.exist?(CONFIG_FILE_NAME)
         data = File.open CONFIG_FILE_NAME do |f|
@@ -54,6 +47,13 @@ module SendMailOfQiitaMinutes
       end
 
       result_hash
+    end
+
+    private
+
+    def write_config(access_token:, host:)
+      hash = {TARGET_NAME_AUTH_INFO => {'access_token' => access_token, 'host' => host}}
+      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_AUTH_INFO, data: hash
     end
 
     def delete_config

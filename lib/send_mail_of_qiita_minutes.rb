@@ -4,7 +4,10 @@ require 'send_mail_of_qiita_minutes/options'
 require 'send_mail_of_qiita_minutes/auth_info'
 require 'send_mail_of_qiita_minutes/email_config'
 require 'send_mail_of_qiita_minutes/email_address'
+require 'send_mail_of_qiita_minutes/minutes_list'
+
 require 'active_support/all'
+require 'qiita'
 require 'pp'
 
 module SendMailOfQiitaMinutes

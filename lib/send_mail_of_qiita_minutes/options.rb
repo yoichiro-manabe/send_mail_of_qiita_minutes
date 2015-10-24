@@ -58,7 +58,7 @@ module SendMailOfQiitaMinutes
         end
 
         sub_command_parsers['minutes_list'] = OptionParser.new do |opt|
-          opt.on('-s', '--send', 'send minuites for email_address.') { |v| options[:send] = v }
+          opt.on('-s VAL', '--send=VAL', 'send minuites for email_address.') { |v| options[:send] = v }
         end
         sub_command_parsers
       end

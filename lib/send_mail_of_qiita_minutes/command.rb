@@ -26,7 +26,7 @@ module SendMailOfQiitaMinutes
                    when 'email_addresses'
                      EmailAddress.new(options: options).execute
                    when 'minutes_list'
-                     p 'minutes_list'
+                     MinutesList.new(options: options).execute
                  end
 
     end
