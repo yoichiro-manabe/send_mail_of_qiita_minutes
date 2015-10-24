@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "send_mail_of_qiita_minutes"
+
+SendMailOfQiitaMinutes::Command.run(ARGV)
