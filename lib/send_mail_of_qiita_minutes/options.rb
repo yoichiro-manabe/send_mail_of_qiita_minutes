@@ -57,6 +57,12 @@ module SendMailOfQiitaMinutes
           opt.on('-D', '--delete', 'delete all email addresses.') { |v| options[:delete] = v }
         end
 
+        sub_command_parsers['sender_email_address'] = OptionParser.new do |opt|
+          opt.on('-s VAL', '--set=VAL', 'set a email addresses.') { |v| options[:set] = v }
+          opt.on('-d', '--display', 'display all email addresses.') { |v| options[:display] = v }
+          opt.on('-D', '--delete', 'delete all email addresses.') { |v| options[:delete] = v }
+        end
+
         sub_command_parsers['minutes_list'] = OptionParser.new do |opt|
           opt.on('-s VAL', '--send=VAL', 'send minuites for email_address.') { |v| options[:send] = v }
         end

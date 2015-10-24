@@ -27,6 +27,8 @@ module SendMailOfQiitaMinutes
                      EmailAddress.new(options: options).execute
                    when 'minutes_list'
                      MinutesList.new(options: options).execute
+                   when 'sender_email_address'
+                     SenderEmailAddress.new(options: options).execute
                  end
 
     end

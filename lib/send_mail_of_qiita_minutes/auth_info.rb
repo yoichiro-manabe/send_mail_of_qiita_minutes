@@ -21,7 +21,7 @@ module SendMailOfQiitaMinutes
         write_config(access_token: hash['access_token'], host: hash['host'])
 
       elsif @options.key?(:display)
-        hash = read_config
+        hash = AuthInfo.read_config
 
         if hash.blank?
           p 'Unable get auth info.Set auth info.'

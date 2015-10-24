@@ -18,7 +18,7 @@ module SendMailOfQiitaMinutes
         write_config(email_address: email_addresses)
 
       elsif @options.key?(:display)
-        hash = read_config
+        hash = EmailAddress.read_config
 
         if hash.blank?
           p 'Unable get auth info.Set auth info.'
@@ -32,14 +32,7 @@ module SendMailOfQiitaMinutes
       end
     end
 
-    private
-
-    def write_config(email_address:)
-      hash = {TARGET_NAME_EMAIL_ADDRESSES => email_address}
-      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_EMAIL_ADDRESSES, data: hash
-    end
-
-    def read_config
+    def self.read_config
       result_hash = nil
       if File.exist?(CONFIG_FILE_NAME)
         data = File.open CONFIG_FILE_NAME do |f|
@@ -51,6 +44,13 @@ module SendMailOfQiitaMinutes
       end
 
       result_hash
+    end
+
+    private
+
+    def write_config(email_address:)
+      hash = {TARGET_NAME_EMAIL_ADDRESSES => email_address}
+      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_EMAIL_ADDRESSES, data: hash
     end
 
     def delete_config

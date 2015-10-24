@@ -1,3 +1,5 @@
+require 'send_mail_of_qiita_minutes/mailer'
+
 module SendMailOfQiitaMinutes
   class MinutesList
 
@@ -9,12 +11,7 @@ module SendMailOfQiitaMinutes
     end
 
     def execute
-
       if @options.keys.count == 0
-
-        # get entry list by qiita
-        qiita_auth_info = get_auth_info
-
         item_hash = get_munites_list
         item_hash.each do |num, item|
           p "#{num} : #{item['title']}"
@@ -31,9 +28,20 @@ module SendMailOfQiitaMinutes
           return
         end
 
-        html_tags = get_item_rendered_body(item_id: item_id)
+        title_and_body_hash = get_title_and_rendered_body(item_id: item_id)
 
-        p html_tags
+        # send email
+        email_config_hash = SendMailOfQiitaMinutes::EmailConfig.read_config(symbolize_names: true)
+        ActionMailer::Base.smtp_settings = email_config_hash
+
+        to_addresses = SendMailOfQiitaMinutes::EmailAddress.read_config
+        from_address = SendMailOfQiitaMinutes::SenderEmailAddress.read_config
+
+        SendMailOfQiitaMinutes::Mailer.send_email(
+            email_addresses:to_addresses,
+            from:from_address,
+            subject:title_and_body_hash['title'],
+            body:title_and_body_hash['rendered_body']).deliver_now
       end
     end
 
@@ -48,7 +56,7 @@ module SendMailOfQiitaMinutes
       client
     end
 
-    def get_item_rendered_body(item_id:)
+    def get_title_and_rendered_body(item_id:)
       client = get_qiita_client
       response = client.get_item(item_id)
 
@@ -58,7 +66,7 @@ module SendMailOfQiitaMinutes
         return nil
       end
 
-      response.body['rendered_body']
+      {'title' => response.body['title'], 'rendered_body' => response.body['rendered_body']}
     end
 
     def get_munites_list
