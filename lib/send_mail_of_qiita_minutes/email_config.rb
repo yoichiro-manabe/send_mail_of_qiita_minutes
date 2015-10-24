@@ -1,8 +1,7 @@
 require 'json'
 
 module SendMailOfQiitaMinutes
-  class AuthInfo
-
+  class EmailConfig
     def initialize(options:)
       @options = options
     end
@@ -11,12 +10,16 @@ module SendMailOfQiitaMinutes
       if @options.key?(:set)
 
         hash = {}
-        @options[:set].split(',').each do|item|
+        @options[:set].split(',').each do |item|
           key_value = item.split(':')
           hash[key_value[0].strip] = key_value[1].strip
         end
 
-        write_config(access_token: hash['access_token'], host: hash['host'])
+        write_config(address: hash['address'],
+                     port: hash['port'],
+                     domain: hash[:domain],
+                     user_name: hash[:user_name],
+                     password: hash[:password])
 
       elsif @options.key?(:display)
         hash = read_config
@@ -35,12 +38,14 @@ module SendMailOfQiitaMinutes
 
     private
 
-    def write_config(access_token:, host:)
+    def write_config(address:, port:, domain:, user_name:, password:)
+      hash = {'email_config' => {
+          'address' => address, 'port' => port, 'domain' => domain, 'user_name' => user_name, 'password' => password
+      }}
 
-      p "access_token:#{access_token} / host: #{host}"
+      pp "hash:#{hash}"
 
-      hash = {'auth_info' => {'access_token' => access_token, 'host' => host}}
-      SendMailOfQiitaMinutes.write_json_for_append target: 'auth_info', data: hash
+      SendMailOfQiitaMinutes.write_json_for_append target: :email_config, data: hash
     end
 
     def read_config
@@ -50,22 +55,22 @@ module SendMailOfQiitaMinutes
           f.read
         end
 
-        hash = JSON.load data
-        result_hash = hash['auth_info']
+        hash = JSON.load(data)
+        result_hash = hash['email_config']
       end
 
       result_hash
     end
 
     def delete_config
-      SendMailOfQiitaMinutes.delete_config target:'auth_info'
+      SendMailOfQiitaMinutes.delete_config  target:'email_config'
       # if File.exist?(CONFIG_FILE_NAME)
       #   current_data = File.open CONFIG_FILE_NAME do |f|
       #     f.read
       #   end
       #
       #   hash = JSON.load(current_data)
-      #   hash.delete('auth_info') if hash.key? 'auth_info'
+      #   hash.delete('email_config') if hash.key? 'email_config'
       #   SendMailOfQiitaMinutes.write_json data: hash
       # end
     end
