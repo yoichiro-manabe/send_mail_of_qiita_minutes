@@ -1,23 +1,52 @@
 require 'json'
+require 'send_mail_of_qiita_minutes/config_base'
 
 module SendMailOfQiitaMinutes
   class AuthInfo
+    include SendMailOfQiitaMinutes::ConfigBase
 
-    AUTH_INFO_FILE_NAME = 'auth_info.json'.freeze
+    TARGET_NAME_AUTH_INFO = 'auth_info'.freeze
 
-    def write_auth_info(access_token:, host:)
-      data = [{auth_info: {access_token: access_token, host: host}}]
-      json = JSON.dump(data)
+    def initialize(options:)
+      @options = options
+      @target_name = TARGET_NAME_AUTH_INFO
+    end
 
-      File.unlink AUTH_INFO_FILE_NAME if File.exist?(AUTH_INFO_FILE_NAME)
+    def execute
+      if @options.key?(:set)
 
-      File.open AUTH_INFO_FILE_NAME, 'w' do |f|
-        f.write json
+        hash = {}
+        @options[:set].split(',').each do|item|
+          key_value = item.split(':')
+          hash[key_value[0].strip] = key_value[1].strip
+        end
+
+        write_config(access_token: hash['access_token'], host: hash['host'])
+
+      elsif @options.key?(:display)
+        hash = AuthInfo.read_config
+
+        if hash.blank?
+          p 'Unable get auth info.Set auth info.'
+        else
+          p hash
+        end
+      elsif @options.key?(:delete)
+        delete_config
+      else
+        raise ArgumentError
       end
     end
 
-    def read_auth_info
+    def self.read_config
+      ConfigBase.get_config(TARGET_NAME_AUTH_INFO)
+    end
 
+    private
+
+    def write_config(access_token:, host:)
+      hash = {TARGET_NAME_AUTH_INFO => {'access_token' => access_token, 'host' => host}}
+      SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_AUTH_INFO, data: hash
     end
   end
 end
