@@ -21,7 +21,7 @@ module SendMailOfQiitaMinutes
         hash = EmailAddress.read_config
 
         if hash.blank?
-          p 'Unable get auth info.Set auth info.'
+          p "'Unable get email addresses.Execute email_addresses option `email_addresses -s 'aaa@hoge.com, bbb@hoge.com, ccc@bbb.com'`.'"
         else
           p hash
         end

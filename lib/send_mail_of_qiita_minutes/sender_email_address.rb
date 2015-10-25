@@ -5,6 +5,7 @@ module SendMailOfQiitaMinutes
     TARGET_NAME_SENDER_EMAIL_ADDRESS = 'sender_email_address'.freeze
 
     def initialize(options:)
+      p options
       @options = options
     end
 
@@ -16,7 +17,7 @@ module SendMailOfQiitaMinutes
         hash = SenderEmailAddress.read_config
 
         if hash.blank?
-          p 'Unable get email config. Set auth info.'
+          p "Unable get email addresses.Execute sender_email_address option `sender_email_address -s 'aaa@hoge.com'`."
         else
           p hash
         end

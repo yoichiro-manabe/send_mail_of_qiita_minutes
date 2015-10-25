@@ -31,7 +31,7 @@ module SendMailOfQiitaMinutes
         hash = EmailConfig.read_config
 
         if hash.blank?
-          p 'Unable get email config. Set auth info.'
+          p "Unable get email config. Execute email_config option `email_config -s 'address: smtp.host.local, port: 587, domain: your.domain.local, user_name: your_user_name, password: your_password, authentication: plain, enable_starttls_auto: true'`."
         else
           p hash
         end
