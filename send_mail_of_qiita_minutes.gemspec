@@ -8,7 +8,6 @@ Gem::Specification.new do |spec|
   spec.version       = SendMailOfQiitaMinutes::VERSION
   spec.authors       = ["Yoichiro Manabe"]
   spec.email         = ["ymanabe@beaglesoft.net"]
-
   spec.summary       = %q{send email of qiita entry for minutes for qiita team.}
   spec.homepage      = "https://github.com/yoichiro-manabe/send_mail_of_qiita_minutes"
 
@@ -22,14 +21,13 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   # spec.bindir        = "exe"
-  spec.bindir        = "bin"
-  # spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.executables   = ['console']
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "qiita"
+  spec.add_dependency "actionmailer"
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
-  spec.add_dependency "qiita"
-  spec.add_dependency "actionmailer"
+
 end

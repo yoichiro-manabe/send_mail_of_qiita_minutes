@@ -1,4 +1,9 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
 require "bundler/setup"
 require "send_mail_of_qiita_minutes"
 
-SendMailOfQiitaMinutes::Command.run(ARGV)
+builder=SendMailOfQiitaMinutes::Command.run(ARGV)
+command = builder.call
+command.call
