@@ -1,12 +1,15 @@
 require 'json'
+require 'send_mail_of_qiita_minutes/config_base'
 
 module SendMailOfQiitaMinutes
   class EmailConfig
+    include SendMailOfQiitaMinutes::ConfigBase
 
     TARGET_NAME_MAIL_CONFIG = 'email_config'.freeze
 
     def initialize(options:)
       @options = options
+      @target_name = TARGET_NAME_MAIL_CONFIG
     end
 
     def execute
@@ -43,17 +46,9 @@ module SendMailOfQiitaMinutes
     end
 
     def self.read_config(symbolize_names: false)
-      result_hash = nil
-      if File.exist?(CONFIG_FILE_NAME)
-        data = File.open CONFIG_FILE_NAME do |f|
-          f.read
-        end
+      result_hash = ConfigBase.get_config(TARGET_NAME_MAIL_CONFIG)
 
-        hash = JSON.parse(data)
-        result_hash = hash[TARGET_NAME_MAIL_CONFIG]
-      end
-
-      if symbolize_names
+      if result_hash && symbolize_names
         result_hash.map{|k,v| [k.to_sym, v] }.to_h
       else
         result_hash
@@ -76,8 +71,5 @@ module SendMailOfQiitaMinutes
       SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_MAIL_CONFIG, data: hash
     end
 
-    def delete_config
-      SendMailOfQiitaMinutes.delete_config  target:TARGET_NAME_MAIL_CONFIG
-    end
   end
 end

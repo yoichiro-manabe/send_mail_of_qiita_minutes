@@ -6,19 +6,25 @@ require 'send_mail_of_qiita_minutes/email_config'
 require 'send_mail_of_qiita_minutes/email_address'
 require 'send_mail_of_qiita_minutes/sender_email_address'
 require 'send_mail_of_qiita_minutes/minutes_list'
+require 'send_mail_of_qiita_minutes/config_base'
+require 'send_mail_of_qiita_minutes/minutes_list_command/send_command'
+require 'send_mail_of_qiita_minutes/qiita_apis/qiita_api_client'
 
 require 'active_support/all'
 require 'qiita'
 require 'pp'
 
 module SendMailOfQiitaMinutes
-  CONFIG_FILE_NAME = 'config.json'.freeze
+  HOME_DIR_NAME = ENV['HOME'] + '/.SendMailOfQiitaMinutes'
+  CONFIG_FILE_NAME = HOME_DIR_NAME + '/config.json'.freeze
+  ENTRY_NUMBER_FILE_NAME = HOME_DIR_NAME + '/entry_number.json'.freeze
 
   private
   def self.write_json(data:)
 
     json = JSON.dump(data)
 
+    Dir.mkdir(HOME_DIR_NAME) unless Dir.exist?(HOME_DIR_NAME)
     File.unlink CONFIG_FILE_NAME if File.exist?(CONFIG_FILE_NAME)
     File.open CONFIG_FILE_NAME, 'w' do |f|
       f.write json
@@ -26,6 +32,8 @@ module SendMailOfQiitaMinutes
   end
 
   def self.write_json_for_append(target:, data:)
+
+    Dir.mkdir(HOME_DIR_NAME) unless Dir.exist?(HOME_DIR_NAME)
 
     current_config_hash = {}
     if File.exist?(CONFIG_FILE_NAME)

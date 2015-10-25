@@ -1,12 +1,15 @@
 require 'json'
+require 'send_mail_of_qiita_minutes/config_base'
 
 module SendMailOfQiitaMinutes
   class AuthInfo
+    include SendMailOfQiitaMinutes::ConfigBase
 
     TARGET_NAME_AUTH_INFO = 'auth_info'.freeze
 
     def initialize(options:)
       @options = options
+      @target_name = TARGET_NAME_AUTH_INFO
     end
 
     def execute
@@ -36,17 +39,7 @@ module SendMailOfQiitaMinutes
     end
 
     def self.read_config
-      result_hash = nil
-      if File.exist?(CONFIG_FILE_NAME)
-        data = File.open CONFIG_FILE_NAME do |f|
-          f.read
-        end
-
-        hash = JSON.load data
-        result_hash = hash[TARGET_NAME_AUTH_INFO]
-      end
-
-      result_hash
+      ConfigBase.get_config(TARGET_NAME_AUTH_INFO)
     end
 
     private
@@ -54,10 +47,6 @@ module SendMailOfQiitaMinutes
     def write_config(access_token:, host:)
       hash = {TARGET_NAME_AUTH_INFO => {'access_token' => access_token, 'host' => host}}
       SendMailOfQiitaMinutes.write_json_for_append target: TARGET_NAME_AUTH_INFO, data: hash
-    end
-
-    def delete_config
-      SendMailOfQiitaMinutes.delete_config target:TARGET_NAME_AUTH_INFO
     end
   end
 end

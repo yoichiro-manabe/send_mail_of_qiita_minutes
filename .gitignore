@@ -8,7 +8,7 @@
 /spec/reports/
 /tmp/
 
-config.json
+config.json*
 entry_number.json
 
 ### JetBrains template
