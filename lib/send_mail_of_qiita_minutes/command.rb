@@ -5,6 +5,7 @@ require 'pp'
 
 module SendMailOfQiitaMinutes
   class Command
+
     def self.run(argv)
       new(argv).execute
     end
