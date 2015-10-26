@@ -39,34 +39,24 @@ module SendMailOfQiitaMinutes
           raise ArgumentError, "'#{v}' is not send_mail_of_qiita_minutes sub command."
         end
 
-        sub_command_parsers['auth_info'] = OptionParser.new do |opt|
-          opt.on('-s VAL', '--set=VAL', 'set access_token and host.') { |v| options[:set] = v }
-          opt.on('-d', '--display', 'display access_token and host.') { |v| options[:display] = v }
-          opt.on('-D', '--delete', 'delete access_token and host.') { |v| options[:delete] = v }
-        end
-
-        sub_command_parsers['email_config'] = OptionParser.new do |opt|
-          opt.on('-s VAL', '--set=VAL', 'set a email config.') { |v| options[:set] = v }
-          opt.on('-d', '--display', 'display the email config.') { |v| options[:display] = v }
-          opt.on('-D', '--delete', 'delete the email config.') { |v| options[:delete] = v }
-        end
-
-        sub_command_parsers['email_addresses'] = OptionParser.new do |opt|
-          opt.on('-s VAL', '--set=VAL', 'set a email addresses.') { |v| options[:set] = v }
-          opt.on('-d', '--display', 'display all email addresses.') { |v| options[:display] = v }
-          opt.on('-D', '--delete', 'delete all email addresses.') { |v| options[:delete] = v }
-        end
-
-        sub_command_parsers['sender_email_address'] = OptionParser.new do |opt|
-          opt.on('-s VAL', '--set=VAL', 'set a email addresses.') { |v| options[:set] = v }
-          opt.on('-d', '--display', 'display all email addresses.') { |v| options[:display] = v }
-          opt.on('-D', '--delete', 'delete all email addresses.') { |v| options[:delete] = v }
-        end
+        sub_command_parsers['auth_info'] = set_sub_command_parser(description:'auth_info', options:options)
+        sub_command_parsers['email_config'] = set_sub_command_parser(description:'email_config', options:options)
+        sub_command_parsers['email_addresses'] = set_sub_command_parser(description:'email_addresses', options:options)
+        sub_command_parsers['sender_email_address'] = set_sub_command_parser(description:'sender_email_address', options:options)
 
         sub_command_parsers['minutes_list'] = OptionParser.new do |opt|
           opt.on('-s VAL', '--send=VAL', 'send minuites for email_address.') { |v| options[:send] = v }
         end
+
         sub_command_parsers
+      end
+
+      def self.set_sub_command_parser(description:, options:)
+        OptionParser.new do |opt|
+          opt.on('-s VAL', '--set=VAL', "set #{description}.") { |v| options[:set] = v }
+          opt.on('-d', '--display', "display#{description}.") { |v| options[:display] = v }
+          opt.on('-D', '--delete', "delete #{description}.") { |v| options[:delete] = v }
+        end
       end
     end
   end
