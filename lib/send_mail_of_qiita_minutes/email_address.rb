@@ -21,6 +21,8 @@ module SendMailOfQiitaMinutes
 
         write_config(email_address: email_addresses)
 
+        p 'メールの宛先が保存されました。'
+
       elsif @options.key?(:display)
         hash = EmailAddress.read_config
 
@@ -31,6 +33,8 @@ module SendMailOfQiitaMinutes
         end
       elsif @options.key?(:delete)
         delete_config
+
+        p 'メールの宛先が削除されました。'
       else
         raise ArgumentError
       end

@@ -16,6 +16,7 @@ module SendMailOfQiitaMinutes
 
         # send email
         email_config_hash = SendMailOfQiitaMinutes::EmailConfig.read_config(symbolize_names: true)
+        email_config_hash[:openssl_verify_mode] = OpenSSL::SSL::VERIFY_NONE
         ActionMailer::Base.smtp_settings = email_config_hash
 
         to_addresses = SendMailOfQiitaMinutes::EmailAddress.read_config

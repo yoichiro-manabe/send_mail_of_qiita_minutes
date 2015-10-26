@@ -23,6 +23,7 @@ module SendMailOfQiitaMinutes
 
         write_config(access_token: hash['access_token'], host: hash['host'])
 
+        p '認証情報が正しく登録されました。'
       elsif @options.key?(:display)
         hash = AuthInfo.read_config
 
@@ -33,6 +34,8 @@ module SendMailOfQiitaMinutes
         end
       elsif @options.key?(:delete)
         delete_config
+
+        p '認証情報が削除されました。'
       else
         raise ArgumentError
       end

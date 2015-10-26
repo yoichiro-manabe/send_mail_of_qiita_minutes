@@ -12,7 +12,6 @@ module SendMailOfQiitaMinutes
 
     def initialize(argv)
       @argv = argv
-      p argv
     end
 
     def execute

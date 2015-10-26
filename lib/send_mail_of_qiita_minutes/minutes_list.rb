@@ -8,7 +8,6 @@ module SendMailOfQiitaMinutes
     TARGET_TAG_NAME = '議事録'.freeze
 
     def initialize(options:)
-      p options
       @options = options
     end
 

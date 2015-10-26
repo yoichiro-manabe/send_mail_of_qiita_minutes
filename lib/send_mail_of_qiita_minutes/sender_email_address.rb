@@ -15,7 +15,7 @@ module SendMailOfQiitaMinutes
     def execute
       if @options.key?(:set)
         write_config(sender_email_address: @options[:set])
-
+        p '差出人のメールアドレスが設定されました。'
       elsif @options.key?(:display)
         hash = SenderEmailAddress.read_config
 
@@ -26,6 +26,7 @@ module SendMailOfQiitaMinutes
         end
       elsif @options.key?(:delete)
         delete_config
+        p '差出人のメールアドレスが削除されました。'
       else
         raise ArgumentError
       end

@@ -30,6 +30,8 @@ module SendMailOfQiitaMinutes
                      enable_starttls_auto: hash['enable_starttls_auto']
         )
 
+        p 'メールの送信設定が正常に保存されました。'
+
       elsif @options.key?(:display)
         hash = EmailConfig.read_config
 
@@ -40,6 +42,7 @@ module SendMailOfQiitaMinutes
         end
       elsif @options.key?(:delete)
         delete_config
+        p 'メールの送信設定が削除されました。'
       else
         raise ArgumentError
       end
