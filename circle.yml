@@ -50,7 +50,7 @@ dependencies:
 ## Customize test commands
 test:
   pre:
-    - bundle exec rubocop
+#    - bundle exec rubocop
   override:
     - bundle exec rake spec
 
