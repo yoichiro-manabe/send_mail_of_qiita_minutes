@@ -15,7 +15,7 @@ require 'qiita'
 require 'pp'
 
 module SendMailOfQiitaMinutes
-  HOME_DIR_NAME = ENV['HOME'] + '/.SendMailOfQiitaMinutes'
+  HOME_DIR_NAME = ENV['HOME'] + '/.send_mail_of_qiita_minutes'
   CONFIG_FILE_NAME = HOME_DIR_NAME + '/config.json'.freeze
   ENTRY_NUMBER_FILE_NAME = HOME_DIR_NAME + '/entry_number.json'.freeze
 
